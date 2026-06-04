@@ -1,3 +1,4 @@
+import Link from "next/link";
 export default function Home() {
   return (
     <main className="min-h-screen bg-black text-white">
@@ -14,9 +15,12 @@ export default function Home() {
           Helping Kampala passengers track public transport in real time.
         </p>
 
-        <button className="mt-10 rounded-full bg-green-600 px-8 py-4 font-semibold transition hover:bg-green-500">
-          Track Live Bus
-        </button>
+        <Link
+  href="/tracking"
+  className="mt-10 rounded-full bg-green-600 px-8 py-4 font-semibold transition hover:bg-green-500"
+>
+  Track Live Bus
+</Link>
       </section>
       <section className="bg-zinc-950 px-6 py-20">
   <div className="mx-auto max-w-6xl">
