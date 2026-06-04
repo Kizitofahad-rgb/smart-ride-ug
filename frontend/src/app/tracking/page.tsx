@@ -1,3 +1,11 @@
+"use client";
+
+import dynamic from "next/dynamic";
+
+const Map = dynamic(() => import("@/components/Map"), {
+  ssr: false,
+});
+
 export default function TrackingPage() {
   return (
     <main className="min-h-screen bg-black text-white p-8">
@@ -9,10 +17,8 @@ export default function TrackingPage() {
         Real-time vehicle tracking will appear here.
       </p>
 
-      <div className="mt-8 rounded-2xl border border-zinc-800 bg-zinc-900 p-8">
-        <p>🚌 Bus 01</p>
-        <p className="mt-2">Status: Online</p>
-        <p className="mt-2">Location: Makerere Main Gate</p>
+      <div className="mt-8">
+        <Map />
       </div>
     </main>
   );
