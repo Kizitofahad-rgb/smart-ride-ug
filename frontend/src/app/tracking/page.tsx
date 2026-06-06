@@ -17,9 +17,22 @@ export default function TrackingPage() {
         Real-time vehicle tracking will appear here.
       </p>
 
-      <div className="mt-8">
-        <Map />
-      </div>
+      <div
+  className="
+    mt-8
+    rounded-3xl
+    overflow-hidden
+    border border-white/10
+    bg-white/5
+    backdrop-blur-md
+    shadow-2xl
+    max-w-5xl
+    mx-auto
+  "
+>
+  <Map />
+</div>
+
     </main>
   );
 }
