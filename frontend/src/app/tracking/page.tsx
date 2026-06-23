@@ -1,188 +1,139 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { useState } from "react";
-import RouteSearch from "@/components/RouteSearch";
 
+import Dashboard from "@/components/Dashboard";
+import TripHistory from "@/components/TripHistory";
 
-const Map = dynamic(() => import("@/components/Map"), {
-  ssr: false,
-});
 
+const Map = dynamic(
+  () => import("@/components/Map"),
+  {
+    ssr:false,
+  }
+);
 
-export default function TrackingPage() {
 
-  const [showSearch, setShowSearch] = useState(false);
 
+export default function TrackingPage(){
 
-  return (
 
-    <main
-      className="
-      min-h-screen
-      bg-gradient-to-br
-      from-black
-      via-zinc-900
-      to-black
-      text-white
-      p-6
-      "
-    >
+return (
 
 
-      <h1
-        className="
-        text-4xl
-        font-bold
-        "
-      >
-        Live Bus Tracking 🚍
-      </h1>
+<main
 
+className="
+min-h-screen
+bg-black
+text-white
+p-8
+"
 
-      <p className="
-        mt-2
-        text-zinc-400
-      ">
-        Real-time public transport tracking
-      </p>
+>
 
 
+<h1
 
+className="
+text-4xl
+font-bold
+"
 
-      <div
-        className="
-        relative
-        mt-8
-        max-w-6xl
-        mx-auto
-        rounded-3xl
-        overflow-hidden
-        border
-        border-white/20
-        shadow-2xl
-        "
-      >
+>
 
+Live Bus Tracking
 
+</h1>
 
-        {/* Search Button */}
 
-        <button
 
-          onClick={() => setShowSearch(!showSearch)}
 
-          className="
-          absolute
-          z-[1000]
-          top-5
-          left-5
-          bg-black/70
-          backdrop-blur-xl
-          border
-          border-white/20
-          rounded-full
-          px-5
-          py-3
-          hover:bg-white/20
-          transition
-          "
-        >
 
-          🔍 Search Bus
+<p
 
-        </button>
+className="
+mt-4
+text-zinc-400
+"
 
+>
 
+Real-time fleet monitoring system.
 
+</p>
 
 
-        {/* Search Window */}
 
-        {showSearch && (
 
-          <div
 
-            className="
-            absolute
-            z-[1000]
-            top-20
-            left-5
-            w-96
-            max-h-[500px]
-            overflow-y-auto
-            bg-zinc-950/95
-            backdrop-blur-xl
-            border
-            border-white/20
-            rounded-2xl
-            p-5
-            shadow-xl
-            "
 
-          >
 
 
+{/* FLEET DASHBOARD */}
 
-            <div
-              className="
-              flex
-              justify-between
-              items-center
-              mb-4
-              "
-            >
+<Dashboard />
 
-              <h2 className="font-bold text-xl">
-                Find Bus
-              </h2>
 
 
-              <button
 
-                onClick={() => setShowSearch(false)}
 
-                className="
-                text-zinc-400
-                hover:text-white
-                text-xl
-                "
-              >
 
-                ✕
 
 
-              </button>
 
 
-            </div>
+{/* MAP CONTAINER */}
 
 
+<div
 
-            <RouteSearch />
 
+className="
+mt-8
+rounded-3xl
+overflow-hidden
+border
+border-white/10
+bg-white/5
+backdrop-blur-md
+shadow-2xl
+max-w-5xl
+mx-auto
+"
 
 
-          </div>
+>
 
 
-        )}
+<Map />
 
 
+</div>
 
 
 
-        <Map />
 
 
 
-      </div>
 
 
 
+{/* TRIP HISTORY */}
 
-    </main>
 
-  );
+<TripHistory />
+
+
+
+
+
+
+
+</main>
+
+
+);
+
 
 }
