@@ -9,6 +9,18 @@ app.use(cors());
 app.use(express.json());
 
 // ============================
+// OPERATORS (in-memory)
+// ============================
+const operators = [
+  {
+    id: "OP001",
+    email: "admin@smartride.com",
+    password: "123456",
+    name: "Smart Ride Admin"
+  }
+];
+
+// ============================
 // TRIP HISTORY ROUTES
 // ============================
 app.use("/api/trips", tripRoutes);
@@ -33,7 +45,7 @@ let bus = {
   latitude: route[0].latitude,
   longitude: route[0].longitude,
   speed: 42,
-  passengers: 0,          // will be recalculated from passenger list on startup
+  passengers: 0,
   status: "active"
 };
 
@@ -46,26 +58,61 @@ let passengers = [
     name: "Passenger 01",
     latitude: 0.3560,
     longitude: 32.5910,
-    status: "waiting"      // possible: "waiting", "onboard", "completed"
+    status: "waiting"
   },
   {
     id: "P002",
     name: "Passenger 02",
     latitude: 0.3580,
     longitude: 32.5930,
-    status: "onboard"
+    status: "waiting"
   },
   {
     id: "P003",
     name: "Passenger 03",
     latitude: 0.3545,
     longitude: 32.5895,
-    status: "onboard"
+    status: "waiting"
   }
 ];
 
 // Initialize bus passenger count based on initial onboard passengers
 bus.passengers = passengers.filter(p => p.status === "onboard").length;
+
+// ============================
+// OPERATOR LOGIN ENDPOINT
+// ============================
+app.post("/api/operator/login", (req, res) => {
+  console.log("LOGIN DATA RECEIVED:");
+  console.log(req.body);
+
+const { email, password } = req.body || {};
+
+  if (!email || !password) {
+    return res.status(400).json({
+      success: false,
+      message: "Email and password are required"
+    });
+  }
+
+  const operator = operators.find(
+    op => op.email === email && op.password === password
+  );
+
+  if (!operator) {
+    return res.status(401).json({
+      success: false,
+      message: "Invalid credentials"
+    });
+  }
+
+  // Return operator info (excluding password)
+  const { password: _, ...operatorWithoutPassword } = operator;
+  res.json({
+    success: true,
+    operator: operatorWithoutPassword
+  });
+});
 
 // ============================
 // BUS API
@@ -83,7 +130,6 @@ app.get("/api/passenger", (req, res) => {
   if (passengers.length === 0) {
     return res.status(404).json({ error: "No passengers found" });
   }
-  // Return the first passenger (as previously expected by the frontend)
   res.json(passengers[0]);
 });
 
@@ -107,7 +153,6 @@ app.post("/api/passenger/:id/board", (req, res) => {
     });
   }
 
-  // Board: change status and increment bus passengers
   passenger.status = "onboard";
   bus.passengers += 1;
 
@@ -139,7 +184,6 @@ app.post("/api/passenger/:id/leave", (req, res) => {
     });
   }
 
-  // Leave: change status and decrement bus passengers
   passenger.status = "completed";
   bus.passengers -= 1;
 
@@ -159,14 +203,10 @@ setInterval(() => {
     busIndex = 0;
   }
 
-  // Update location and speed only – passenger count is updated via endpoints
   bus.latitude = route[busIndex].latitude;
   bus.longitude = route[busIndex].longitude;
   bus.speed = 35 + Math.floor(Math.random() * 15);
 
-  // Passengers count is NOT overwritten here – it persists across simulation cycles.
-
-  // SAVE TRIP HISTORY
   fetch("http://localhost:5000/api/trips", {
     method: "POST",
     headers: {

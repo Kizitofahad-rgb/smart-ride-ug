@@ -1,9 +1,10 @@
 "use client";
 
+
 import dynamic from "next/dynamic";
 
 import Dashboard from "@/components/Dashboard";
-import TripHistory from "@/components/TripHistory";
+
 
 
 const Map = dynamic(
@@ -106,6 +107,7 @@ mx-auto
 >
 
 
+
 <Map />
 
 
@@ -122,7 +124,7 @@ mx-auto
 {/* TRIP HISTORY */}
 
 
-<TripHistory />
+
 
 
 
